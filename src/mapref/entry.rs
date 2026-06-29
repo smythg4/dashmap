@@ -81,7 +81,9 @@ impl<'a, K: Eq + Hash, V> Entry<'a, K, V> {
     }
 
     /// Return a mutable reference to the element if it exists,
-    /// otherwise insert the result of a provided function and return a mutable reference to that.
+    /// otherwise insert the result of a provided function that accepts key as
+    /// an argument and return a mutable reference to that.
+    /// Function must take `K` by reference to avoid cloning.
     pub fn or_insert_with_key<F: FnOnce(&K) -> V>(self, default: F) -> RefMut<'a, K, V> {
         match self {
             Entry::Occupied(entry) => entry.into_ref(),
